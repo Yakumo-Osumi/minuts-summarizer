@@ -9,11 +9,11 @@
 
 ## フェーズ構成
 
-| フェーズ | 内容 | 状態 |
-|---|---|---|
-| Phase 1 | AWSなし構成で動くものを作る | 👈 今ここ |
-| Phase 2 | バックエンドをAWS Lambdaに移行 | 未着手 |
-| Phase 3 | S3 + CloudFrontでフロントをホスティング | 未着手 |
+| フェーズ | 内容                                    | 状態      |
+| -------- | --------------------------------------- | --------- |
+| Phase 1  | AWSなし構成で動くものを作る             | 👈 今ここ |
+| Phase 2  | バックエンドをAWS Lambdaに移行          | 未着手    |
+| Phase 3  | S3 + CloudFrontでフロントをホスティング | 未着手    |
 
 ---
 
@@ -26,10 +26,10 @@
 
 バックエンド
 └── Node.js + Express
-    └── OpenAI APIの呼び出し（APIキーをサーバー側で管理）
+    └── Gemini APIの呼び出し（APIキーをサーバー側で管理）
 
-OpenAI API
-└── gpt-4o-mini（コスト低・速度速）
+Gemini API
+└── gemini-1.5-flash（無料枠あり・速度速）
     └── 要約 + タスク抽出のプロンプト処理
 ```
 
@@ -58,8 +58,8 @@ project-root/
     │   ├── routes/
     │   │   └── summarize.ts       # POST /api/summarize
     │   └── services/
-    │       └── openai.ts          # OpenAI APIラッパー ← AWS移行時にここだけ変える
-    ├── .env                       # OPENAI_API_KEY（gitignore必須）
+    │       └── gemini.ts          # Gemini APIラッパー ← AWS移行時にここだけ変える
+    ├── .env                       # GEMINI_API_KEY（gitignore必須）
     └── package.json
 ```
 
@@ -70,6 +70,7 @@ project-root/
 ### POST /api/summarize
 
 **Request**
+
 ```json
 {
   "text": "議事録のテキスト全文..."
@@ -77,19 +78,30 @@ project-root/
 ```
 
 **Response**
+
 ```json
 {
   "summary": "会議の要約テキスト...",
   "tasks": [
-    { "id": 1, "assignee": "田中", "content": "〇〇の資料を作成する", "deadline": "今週中" },
-    { "id": 2, "assignee": "未定", "content": "次回MTGの日程調整", "deadline": "明日まで" }
+    {
+      "id": 1,
+      "assignee": "田中",
+      "content": "〇〇の資料を作成する",
+      "deadline": "今週中"
+    },
+    {
+      "id": 2,
+      "assignee": "未定",
+      "content": "次回MTGの日程調整",
+      "deadline": "明日まで"
+    }
   ]
 }
 ```
 
 ---
 
-## OpenAI プロンプト設計
+## Gemini プロンプト設計
 
 ```
 system:
@@ -112,13 +124,15 @@ user:
 ## 実装ステップ（Phase 1）
 
 ### Step 1：バックエンド構築
+
 - [ ] `backend/` を Node.js + Express + TypeScript で初期化
-- [ ] `.env` に `OPENAI_API_KEY` を設定
+- [ ] `.env` に `GEMINI_API_KEY` を設定
 - [ ] `POST /api/summarize` エンドポイントを作成
-- [ ] OpenAI APIを呼び出してJSON形式でレスポンスを返す
+- [ ] Gemini APIを呼び出してJSON形式でレスポンスを返す
 - [ ] エラーハンドリング（APIエラー・空テキスト）を実装
 
 ### Step 2：フロントエンド構築
+
 - [ ] `frontend/` を Vite + React + TypeScript で初期化
 - [ ] 議事録入力テキストエリアを実装
 - [ ] 「要約する」ボタン押下でバックエンドにPOST
@@ -127,6 +141,7 @@ user:
 - [ ] エラー時のメッセージ表示
 
 ### Step 3：仕上げ
+
 - [ ] CORSの設定（フロント→バックエンドの通信を許可）
 - [ ] 入力バリデーション（空文字・文字数制限）
 - [ ] UIデザインの整備
@@ -145,7 +160,7 @@ user:
 変更後：AWS Lambda関数 + API Gateway
 
 変更が必要なファイル：
-- backend/src/services/openai.ts → Lambda関数ハンドラに流用可能
+- backend/src/services/gemini.ts → Lambda関数ハンドラに流用可能
 - frontend/src/hooks/useSummarize.ts → APIのURLをAPI GatewayのURLに変更するだけ
 ```
 
@@ -157,18 +172,18 @@ user:
 API Gateway（POST /summarize）
   ↓
 Lambda関数
-  ├── OpenAI API呼び出し
+  ├── Gemini API呼び出し
   └── レスポンスをJSONで返す
 ```
 
 ### 必要なAWSリソース
 
-| リソース | 用途 |
-|---|---|
-| AWS Lambda | バックエンド処理（Express不要になる） |
-| API Gateway | HTTPエンドポイントの公開 |
-| IAM Role | LambdaがAWSサービスを使うための権限 |
-| Secrets Manager | OPENAI_API_KEYの安全な管理 |
+| リソース        | 用途                                  |
+| --------------- | ------------------------------------- |
+| AWS Lambda      | バックエンド処理（Express不要になる） |
+| API Gateway     | HTTPエンドポイントの公開              |
+| IAM Role        | LambdaがAWSサービスを使うための権限   |
+| Secrets Manager | GEMINI_API_KEYの安全な管理            |
 
 ---
 
@@ -201,16 +216,16 @@ aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
 
 ## 環境変数一覧
 
-| 変数名 | フェーズ | 説明 |
-|---|---|---|
-| `OPENAI_API_KEY` | Phase 1〜 | OpenAIのAPIキー |
-| `PORT` | Phase 1 | Expressのポート番号（デフォルト3001） |
-| `VITE_API_URL` | Phase 1〜 | フロントからAPIを叩くURL |
+| 変数名           | フェーズ  | 説明                                  |
+| ---------------- | --------- | ------------------------------------- |
+| `GEMINI_API_KEY` | Phase 1〜 | GeminiのAPIキー                       |
+| `PORT`           | Phase 1   | Expressのポート番号（デフォルト3001） |
+| `VITE_API_URL`   | Phase 1〜 | フロントからAPIを叩くURL              |
 
 ---
 
 ## 注意事項
 
-- `OPENAI_API_KEY` は絶対にフロントエンドのコードに書かない（GitHubに漏れる）
+- `GEMINI_API_KEY` は絶対にフロントエンドのコードに書かない（GitHubに漏れる）
 - `.env` は `.gitignore` に必ず追加する
-- OpenAI APIの利用料金が発生するため、開発中は `gpt-4o-mini` を使う
+- Gemini APIは無料枠があるため、開発中は `gemini-1.5-flash` を使う
