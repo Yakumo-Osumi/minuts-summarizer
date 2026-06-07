@@ -29,7 +29,7 @@
     └── Gemini APIの呼び出し（APIキーをサーバー側で管理）
 
 Gemini API
-└── gemini-1.5-flash（無料枠あり・速度速）
+└── gemini-3.5-flash（無料枠あり・速度速）
     └── 要約 + タスク抽出のプロンプト処理
 ```
 
@@ -62,6 +62,22 @@ project-root/
     ├── .env                       # GEMINI_API_KEY（gitignore必須）
     └── package.json
 ```
+
+---
+
+## 設計上の判断メモ
+
+### routes/summarize.ts から直接 gemini.ts を呼ぶ構成について
+
+本来は以下の3層構造が理想：
+
+```
+routes/summarize.ts       → ルーティング
+services/summarize.ts     → ビジネスロジック
+services/gemini.ts        → Gemini APIラッパー
+```
+
+ただし今回はエンドポイントが1つのみでビジネスロジックが薄いため、中間層を省略して routes から直接 gemini.ts を呼ぶ構成を採用。規模が拡大した場合は3層構造に移行する。
 
 ---
 
@@ -125,11 +141,11 @@ user:
 
 ### Step 1：バックエンド構築
 
-- [ ] `backend/` を Node.js + Express + TypeScript で初期化
-- [ ] `.env` に `GEMINI_API_KEY` を設定
-- [ ] `POST /api/summarize` エンドポイントを作成
-- [ ] Gemini APIを呼び出してJSON形式でレスポンスを返す
-- [ ] エラーハンドリング（APIエラー・空テキスト）を実装
+- [x] `backend/` を Node.js + Express + TypeScript で初期化
+- [x] `.env` に `GEMINI_API_KEY` を設定
+- [x] `POST /api/summarize` エンドポイントを作成
+- [x] Gemini APIを呼び出してJSON形式でレスポンスを返す
+- [x] エラーハンドリング（APIエラー・空テキスト）を実装
 
 ### Step 2：フロントエンド構築
 
@@ -228,4 +244,4 @@ aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
 
 - `GEMINI_API_KEY` は絶対にフロントエンドのコードに書かない（GitHubに漏れる）
 - `.env` は `.gitignore` に必ず追加する
-- Gemini APIは無料枠があるため、開発中は `gemini-1.5-flash` を使う
+- Gemini APIは無料枠があるため、開発中は `gemini-3.5-flash` を使う
