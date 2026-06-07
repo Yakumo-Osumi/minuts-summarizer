@@ -3,9 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 /*
-dotenv.config()は他のimportより前に呼ぶ必要がある
-理由：importされたモジュールはその時点でprocess.envを参照するため、
-後からdotenv.config()を呼んでも環境変数が読み込まれない
+dotenv.config()はsummarizeRouterのimportより前に呼ぶ必要がある。
+gemini.tsがモジュール読み込み時にprocess.env.GEMINI_API_KEYをトップレベルで参照するため。
+CommonJSではimportがrequire()にコンパイルされ上から逐次実行されるので、この配置が有効。
+（ESMの場合はimportが巻き上げられるためこの書き方は機能しない）
 */
 dotenv.config();
 
