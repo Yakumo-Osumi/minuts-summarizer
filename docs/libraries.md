@@ -7,7 +7,7 @@
 | express    | Node.js用Webサーバーフレームワーク |
 | cors       | クロスオリジンリクエストを許可する |
 | dotenv     | .envファイルから環境変数を読み込む |
-| openai     | OpenAI APIクライアント             |
+| @google/genai | Gemini APIクライアント          |
 
 ## frontend
 
