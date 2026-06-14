@@ -1,10 +1,24 @@
 import { GoogleGenAI } from '@google/genai';
+import { z } from 'zod';
 
 if (!process.env.GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY が設定されていません');
 }
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+// レスポンスのスキーマ定義
+const summarizeSchema = z.object({
+  summary: z.string(),
+  tasks: z.array(
+    z.object({
+      id: z.number(),
+      assignee: z.string(),
+      content: z.string(),
+      deadline: z.string(),
+    }),
+  ),
+});
 
 const SYSTEM_PROMPT = `あなたは議事録を分析するアシスタントです。
 以下のJSON形式のみで返答してください。余分なテキストは不要です。
@@ -26,8 +40,15 @@ export const summarizeMeeting = async (text: string) => {
   // JSONのみ抽出（余分なテキストを除去）
   const jsonMatch = responseText.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
+    throw new Error('JSON形式を検知できませんでした');
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonMatch[0]);
+  } catch {
     throw new Error('JSONの解析に失敗しました');
   }
 
-  return JSON.parse(jsonMatch[0]);
+  return parsed;
 };
