@@ -12,7 +12,7 @@ router.post('/', async (req: Request, res: Response) => {
   console.log('リクエスト受信', req.body);
   const { text } = req.body;
 
-  if (!text || text.trim() === '') {
+  if (!text || typeof text !== 'string' || text.trim() === '') {
     res.status(400).json({ error: '議事録テキストを入力してください' });
     return;
   }
