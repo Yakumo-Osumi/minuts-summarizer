@@ -50,5 +50,11 @@ export const summarizeMeeting = async (text: string) => {
     throw new Error('JSONの解析に失敗しました');
   }
 
-  return parsed;
+  try {
+    const validated = summarizeSchema.parse(parsed);
+
+    return validated;
+  } catch {
+    throw new Error('AIが指定したJSON形式で返しませんでした');
+  }
 };
