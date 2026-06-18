@@ -54,6 +54,6 @@
       "Bash(wget *)",
       "Bash(chmod 777 *)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "default"
   }
 }
