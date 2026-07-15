@@ -20,6 +20,20 @@ router.post('/', async (req: Request, res: Response) => {
     return;
   }
 
+  if (text.length < 100) {
+    res
+      .status(400)
+      .json({ error: '議事録テキストは100文字以上入力してください' });
+    return;
+  }
+
+  if (text.length > 5000) {
+    res
+      .status(400)
+      .json({ error: '議事録テキストは5000文字以内で入力してください' });
+    return;
+  }
+
   try {
     const result = await summarizeMeeting(text);
     res.json(result);
