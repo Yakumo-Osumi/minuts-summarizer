@@ -1,4 +1,5 @@
 import type { SummarizeResponse } from "../types";
+import TaskExportControls from "./TaskExportControls";
 
 type Props = {
   result: SummarizeResponse;
@@ -12,7 +13,10 @@ function ResultArea({ result }: Props) {
         <p className="text-gray-700 leading-relaxed">{result.summary}</p>
       </div>
       <div className="bg-gray-50 rounded-lg p-6">
-        <h2 className="text-lg font-bold mb-3 text-gray-800">タスク一覧</h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-bold text-gray-800">タスク一覧</h2>
+          <TaskExportControls tasks={result.tasks} />
+        </div>
         {result.tasks.length === 0 ? (
           <p className="text-gray-400 text-sm">タスクはありませんでした</p>
         ) : (
