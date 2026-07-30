@@ -1,0 +1,26 @@
+{
+  "summary": "",
+  "tasks": [
+    {
+      "id": 1,
+      "assignee": "渡辺",
+      "content": "本日の議事録を全員へ共有する",
+      "deadline": "2026年07月17日（金）",
+      "matchKey": { "noun": "議事録", "verb": "共有する" }
+    },
+    {
+      "id": 2,
+      "assignee": "中村",
+      "content": "採用要件をドキュメント化する",
+      "deadline": "2026年07月31日（金）",
+      "matchKey": { "noun": "採用要件", "verb": "まとめる" }
+    },
+    {
+      "id": 3,
+      "assignee": "不明",
+      "content": "福利厚生の見直しを検討するための取りまとめ役を決める",
+      "deadline": "2026年08月5日（金）",
+      "matchKey": { "noun": "福利厚生", "verb": "決める" }
+    }
+  ]
+}

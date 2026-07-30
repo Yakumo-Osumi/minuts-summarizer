@@ -29,7 +29,7 @@
     └── Gemini APIの呼び出し（APIキーをサーバー側で管理）
 
 Gemini API
-└── gemini-3.5-flash（無料枠あり・速度速）
+└── gemini-3.1-flash-lite（無料枠あり・速度速・低コスト）
     └── 要約 + タスク抽出のプロンプト処理
 ```
 
@@ -265,4 +265,4 @@ aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
 
 - `GEMINI_API_KEY` は絶対にフロントエンドのコードに書かない（GitHubに漏れる）
 - `.env` は `.gitignore` に必ず追加する
-- Gemini APIは無料枠があるため、開発中は `gemini-3.5-flash` を使う
+- Gemini APIは無料枠・低コストのため、開発中は `gemini-3.1-flash-lite` を使う

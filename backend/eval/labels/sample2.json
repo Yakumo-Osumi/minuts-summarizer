@@ -1,0 +1,19 @@
+{
+  "summary": "",
+  "tasks": [
+    {
+      "id": 1,
+      "assignee": "山田",
+      "content": "新商品のSNS投稿案を3案用意する",
+      "deadline": "2026年07月22日（水）",
+      "matchKey": { "noun": "SNS投稿案", "verb": "用意する" }
+    },
+    {
+      "id": 2,
+      "assignee": "不明",
+      "content": "競合サービスの調査担当を決める",
+      "deadline": "2026年07月22日（水）",
+      "matchKey": { "noun": "競合", "verb": "決める" }
+    }
+  ]
+}

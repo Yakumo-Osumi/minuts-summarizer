@@ -1,0 +1,26 @@
+{
+  "summary": "",
+  "tasks": [
+    {
+      "id": 1,
+      "assignee": "佐藤",
+      "content": "API仕様書の更新を行う",
+      "deadline": "2026年07月17日（金）",
+      "matchKey": { "noun": "API仕様書", "verb": "更新" }
+    },
+    {
+      "id": 2,
+      "assignee": "田中",
+      "content": "ログイン画面のバグ修正を行う",
+      "deadline": "2026年07月14日（火）",
+      "matchKey": { "noun": "ログイン画面", "verb": "修正" }
+    },
+    {
+      "id": 3,
+      "assignee": "鈴木",
+      "content": "次回スプリントのためのテストケースを洗い出す",
+      "deadline": "次回定例（2026年07月21日（火））まで",
+      "matchKey": { "noun": "テストケース", "verb": "洗い出す" }
+    }
+  ]
+}

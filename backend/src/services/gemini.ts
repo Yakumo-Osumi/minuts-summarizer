@@ -31,7 +31,7 @@ const SYSTEM_PROMPT = `あなたは議事録を分析するアシスタントで
 
 export const summarizeMeeting = async (text: string) => {
   const response = await ai.models.generateContent({
-    model: 'gemini-3.5-flash',
+    model: 'gemini-3.1-flash-lite',
     contents: `${SYSTEM_PROMPT}\n\n以下の議事録を分析してください。\n${text}`,
   });
 
