@@ -11,7 +11,6 @@ type Task = {
 
 type MatchKey = {
   noun: string;
-  verb: string;
 };
 
 type GoldTask = Task & { matchKey: MatchKey };
@@ -43,18 +42,8 @@ function normalizeAssignee(assignee: string): string {
   return UNASSIGNED_ALIASES.has(assignee) ? '未定' : assignee;
 }
 
-// content内の表現ゆれを吸収するための同義語許容リスト。9件のサンプルで実際に必要になったペアのみ登録する。
-const VERB_SYNONYMS: Record<string, string[]> = {
-  決める: ['決める', '決定する'],
-};
-
-function verbMatches(verb: string, content: string): boolean {
-  const variants = VERB_SYNONYMS[verb] ?? [verb];
-  return variants.some((variant) => content.includes(variant));
-}
-
 function matchKeyMatches(matchKey: MatchKey, content: string): boolean {
-  return content.includes(matchKey.noun) && verbMatches(matchKey.verb, content);
+  return content.includes(matchKey.noun);
 }
 
 // "2026年07月17日" や "次回定例（2026年7月21日）まで" のように埋め込まれた日付を抽出し、ISO形式に正規化する
