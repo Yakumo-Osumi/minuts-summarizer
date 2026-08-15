@@ -1,0 +1,26 @@
+{
+  "summary": "",
+  "tasks": [
+    {
+      "id": 1,
+      "assignee": "木村",
+      "content": "在庫CSVエクスポートの不具合を修正する",
+      "deadline": "2026年11月6日",
+      "matchKey": { "noun": "在庫CSVエクスポート" }
+    },
+    {
+      "id": 2,
+      "assignee": "小林",
+      "content": "送料改定お知らせページの作成",
+      "deadline": "2026年11月30日",
+      "matchKey": { "noun": "送料改定お知らせページ" }
+    },
+    {
+      "id": 3,
+      "assignee": "不明",
+      "content": "新倉庫の契約先を決める",
+      "deadline": "次回まで",
+      "matchKey": { "noun": "新倉庫の契約先" }
+    }
+  ]
+}

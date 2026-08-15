@@ -1,0 +1,26 @@
+{
+  "summary": "",
+  "tasks": [
+    {
+      "id": 1,
+      "assignee": "岡田",
+      "content": "FAQページの料金記載を更新する",
+      "deadline": "2026年10月9日",
+      "matchKey": { "noun": "FAQページ" }
+    },
+    {
+      "id": 2,
+      "assignee": "藤井",
+      "content": "返信テンプレートの言い回しを見直す",
+      "deadline": "2026年10月14日",
+      "matchKey": { "noun": "返信プレート" }
+    },
+    {
+      "id": 3,
+      "assignee": "不明",
+      "content": "満足度アンケートの担当を決める",
+      "deadline": "2026年10月14日",
+      "matchKey": { "noun": "満足度アンケート" }
+    }
+  ]
+}

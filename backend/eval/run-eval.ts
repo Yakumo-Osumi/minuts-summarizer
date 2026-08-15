@@ -34,6 +34,14 @@ type SampleResult = {
 };
 
 const SAMPLE_NAMES = ['sample1', 'sample2', 'sample3'];
+const HOLDOUT_NAMES = ['holdout1', 'holdout2'];
+
+// `npm run eval -- holdout` のように第1引数でデータセットを切り替える（未指定時はsample）
+function resolveDatasetNames(): string[] {
+  const dataset = process.argv[2];
+  if (dataset === 'holdout') return HOLDOUT_NAMES;
+  return SAMPLE_NAMES;
+}
 
 // 担当者が曖昧な場合の表記ゆれ（labeling-rules.mdは"不明"、Gemini APIの出力仕様は"未定"）を吸収する
 const UNASSIGNED_ALIASES = new Set(['不明', '未定']);
@@ -121,7 +129,7 @@ function formatPercent(value: number): string {
 }
 
 function main() {
-  const results = SAMPLE_NAMES.map((name) => matchSample(loadSample(name)));
+  const results = resolveDatasetNames().map((name) => matchSample(loadSample(name)));
 
   const tableRows: Record<string, string>[] = [];
   let totalGold = 0;
