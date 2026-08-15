@@ -50,8 +50,14 @@ function normalizeAssignee(assignee: string): string {
   return UNASSIGNED_ALIASES.has(assignee) ? '未定' : assignee;
 }
 
+// 日本語の格助詞の有無による表記ゆれ（例：「送料改定のお知らせページ」/「送料改定お知らせページ」）を吸収するため、
+// 比較の直前にのみ助詞を除去する（gold・outputの元データは変更しない）
+function normalizeForMatch(text: string): string {
+  return text.replace(/[のをがはにでとへも]/g, '');
+}
+
 function matchKeyMatches(matchKey: MatchKey, content: string): boolean {
-  return content.includes(matchKey.noun);
+  return normalizeForMatch(content).includes(normalizeForMatch(matchKey.noun));
 }
 
 // "2026年07月17日" や "次回定例（2026年7月21日）まで" のように埋め込まれた日付を抽出し、ISO形式に正規化する
