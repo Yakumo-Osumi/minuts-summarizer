@@ -71,11 +71,18 @@ function extractIsoDate(text: string): string | null {
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
 
+// 基準日が不明な相対期限の表記ゆれ（例：「次回定例まで」「次回ミーティングまで」）を吸収するため、
+// 付随語を除去し核となる相対語のみを残す（比較の直前にのみ適用し、gold・outputの元データは変更しない）
+function normalizeRelativeDeadline(text: string): string {
+  return text.replace(/(定例|ミーティング|まで)/g, '').trim();
+}
+
 function deadlineMatches(goldDeadline: string, outputDeadline: string): boolean {
   const goldIso = extractIsoDate(goldDeadline);
   const outputIso = extractIsoDate(outputDeadline);
-  if (goldIso === null || outputIso === null) return false;
-  return goldIso === outputIso;
+  if (goldIso !== null && outputIso !== null) return goldIso === outputIso;
+  if (goldIso !== null || outputIso !== null) return false;
+  return normalizeRelativeDeadline(goldDeadline) === normalizeRelativeDeadline(outputDeadline);
 }
 
 function loadSample(name: string): SampleData {
